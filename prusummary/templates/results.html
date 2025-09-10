@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Results - Tax Data Processor{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Processing Results</h1>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Process More Files
+            </a>
+        </div>
+        
+        <div class="alert alert-success" role="alert">
+            <i class="bi bi-check-circle"></i>
+            Successfully processed files. Found {{ row_count }} records with data.
+        </div>
+        
+        <div class="table-container">
+            {{ table|safe }}
+        </div>
+        
+        <div class="mt-4 text-center">
+            <button class="btn btn-success" onclick="downloadTable()">
+                <i class="bi bi-download"></i> Download as CSV
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function downloadTable() {
+    const table = document.getElementById('results-table');
+    if (!table) return;
+    
+    let csv = [];
+    const rows = table.querySelectorAll('tr');
+    
+    for (let i = 0; i < rows.length; i++) {
+        const row = [], cols = rows[i].querySelectorAll('td, th');
+        
+        for (let j = 0; j < cols.length; j++) {
+            row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
+        }
+        csv.push(row.join(','));
+    }
+    
+    const csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
+    const downloadLink = document.createElement('a');
+    downloadLink.download = 'tax_data_results.csv';
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+    downloadLink.style.display = 'none';
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
+</script>
+{% endblock %}

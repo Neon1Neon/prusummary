@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h1 class="text-center mb-4">Tax Data Processor</h1>
+        <p class="text-center text-muted mb-4">Upload Excel files to process tax data and generate monthly tallies</p>
+        
+        <form action="{{ url_for('upload_files') }}" method="post" enctype="multipart/form-data">
+            <div class="file-upload-area">
+                <i class="bi bi-cloud-upload" style="font-size: 3rem; color: #6c757d;"></i>
+                <h4>Select Excel Files</h4>
+                <p class="text-muted">Choose one or more Excel files containing tax data</p>
+                <input type="file" class="form-control" name="files" multiple accept=".xlsx,.xls" required>
+                <small class="form-text text-muted">
+                    Files should be named in the format: "Summary [Month Day, Year].xlsx"<br>
+                    Example: "Summary Jan 15, 2024.xlsx"
+                </small>
+            </div>
+            
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-upload"></i> Process Files
+                </button>
+            </div>
+        </form>
+        
+        <div class="mt-5">
+            <h5>Instructions:</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">1. Select one or more Excel files containing tax data</li>
+                <li class="list-group-item">2. Files should follow the naming convention: "Summary [Month Day, Year].xlsx"</li>
+                <li class="list-group-item">3. Click "Process Files" to generate the monthly tally report</li>
+                <li class="list-group-item">4. Review the results and download if needed</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
